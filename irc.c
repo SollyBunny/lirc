@@ -90,7 +90,7 @@ void irc_log_callback(void (*callback)(enum irc_log_level level, int sublevel, c
 #define irc_info(fmt, ...) __irc_log(IRC_LOG_INFO, 0, __FILE__, __LINE__, __FUNCTION__, fmt, ## __VA_ARGS__)
 #define irc_debug(level, fmt, ...) __irc_log(IRC_LOG_DEBUG, level, __FILE__, __LINE__, __FUNCTION__, fmt, ## __VA_ARGS__)
 
-static void __attribute__ ((format (gnu_printf, 6, 7))) __irc_log(enum irc_log_level level, int sublevel, const char *file, int line, const char *func, const char *fmt, ...)
+static void __attribute__ ((format (printf, 6, 7))) __irc_log(enum irc_log_level level, int sublevel, const char *file, int line, const char *func, const char *fmt, ...)
 {
 	char *buf = NULL;
 	int len = 0;
@@ -578,7 +578,7 @@ ssize_t irc_write(struct irc_client *client, const char *buf, size_t len)
 
 #define IRC_SEND_FIXED(client, s) irc_write(client, s "\r\n", strlen(s "\r\n"))
 
-ssize_t __attribute__ ((format (gnu_printf, 2, 3))) irc_write_fmt(struct irc_client *client, const char *fmt, ...)
+ssize_t __attribute__ ((format (printf, 2, 3))) irc_write_fmt(struct irc_client *client, const char *fmt, ...)
 {
 	ssize_t res;
 	char buf[IRC_MAX_MSG_LEN + 1];

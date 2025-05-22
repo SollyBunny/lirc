@@ -449,7 +449,7 @@ ssize_t irc_write(struct irc_client *client, const char *buf, size_t len);
  * \warning Avoid using this function directly, use irc_send() instead
  * \retval same as write()
  */
-ssize_t __attribute__ ((format (gnu_printf, 2, 3))) irc_write_fmt(struct irc_client *client, const char *fmt, ...);
+ssize_t __attribute__ ((format (printf, 2, 3))) irc_write_fmt(struct irc_client *client, const char *fmt, ...);
 
 /*!
  * \brief write() wrapper for IRC client

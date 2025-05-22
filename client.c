@@ -132,7 +132,7 @@ static void __client_log(enum irc_log_level level, int sublevel, const char *fil
 	}
 }
 
-static void __attribute__ ((format (gnu_printf, 6, 7))) _client_log(enum irc_log_level level, int sublevel, const char *file, int line, const char *func, const char *fmt, ...)
+static void __attribute__ ((format (printf, 6, 7))) _client_log(enum irc_log_level level, int sublevel, const char *file, int line, const char *func, const char *fmt, ...)
 {
 	char *buf;
 	int len;
@@ -148,7 +148,7 @@ static void __attribute__ ((format (gnu_printf, 6, 7))) _client_log(enum irc_log
 	}
 }
 
-static void __attribute__ ((format (gnu_printf, 1, 2))) irc_print(const char *fmt, ...)
+static void __attribute__ ((format (printf, 1, 2))) irc_print(const char *fmt, ...)
 {
 	char *buf;
 	int len;

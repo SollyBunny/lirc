@@ -133,7 +133,7 @@ struct irc_client *irc_client_new(const char *hostname, unsigned int port, const
 	passlen = strlen(password);
 
 	/* Use a single allocation rather than strdup'ing each field */
-	client = calloc(1, sizeof(*client) + hostlen + userlen + passlen + 3); /* 3 NULs */
+	client = (struct irc_client *)calloc(1, sizeof(*client) + hostlen + userlen + passlen + 3); /* 3 NULs */
 	if (!client) {
 		irc_err("calloc failed\n");
 		return NULL;
@@ -624,7 +624,7 @@ static char *base64_encode(const char *data, int input_length, int *outlen)
 	int i, j, output_len;
 
 	output_len = 4 * ((input_length + 2) / 3);
-	encoded_data = malloc((size_t) output_len);
+	encoded_data = (char *)malloc((size_t) output_len);
 	if (!encoded_data) {
 		return NULL;
 	}

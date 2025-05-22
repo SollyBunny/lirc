@@ -10,6 +10,9 @@
  * at the top of the source tree.
  */
 
+#ifndef LIRC_H
+#define LIRC_H
+
 #define LIRC_VERSION_MAJOR 1
 #define LIRC_VERSION_MINOR 0
 #define LIRC_VERSION_PATCH 0
@@ -456,3 +459,5 @@ ssize_t __attribute__ ((format (gnu_printf, 2, 3))) irc_write_fmt(struct irc_cli
  * \retval 0 on success, 1 on failure
  */
 #define irc_send(client, fmt, ...) (irc_write_fmt(client, fmt "\r\n", __VA_ARGS__) <= 0)
+
+#endif

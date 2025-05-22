@@ -13,6 +13,10 @@
 #ifndef LIRC_H
 #define LIRC_H
 
+#include <stdio.h> /* FILE */
+#include <stddef.h> /* size_t */
+#include <sys/types.h> /* ssize_t */
+
 #define LIRC_VERSION_MAJOR 1
 #define LIRC_VERSION_MINOR 0
 #define LIRC_VERSION_PATCH 0

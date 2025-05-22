@@ -38,8 +38,8 @@
 #include <assert.h>
 #include <termios.h>
 
-#include <lirc/irc.h>
-#include <lirc/numerics.h>
+#include "irc.h"
+#include "numerics.h"
 
 #define CLIENT_VERSION "LIRC client 0.2.0" /* LIRC refers to the library, this is the LIRC client */
 #define CLIENT_COPYRIGHT CLIENT_VERSION ", Copyright (C) 2023 Naveen Albert"

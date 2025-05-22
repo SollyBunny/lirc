@@ -51,8 +51,6 @@
 
 #define EXPOSE_IRC_MSG
 
-/* Compiling without the headers installed in the system directories yet,
- * just use a relative path since it should be in the same directory. */
 #include "irc.h"
 
 /*! \brief A client for one IRC server. Use multiple clients for multiple servers or for multiple clients on the same server */

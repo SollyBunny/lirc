@@ -169,7 +169,9 @@ static void __attribute__ ((format (printf, 1, 2))) irc_print(const char *fmt, .
 	va_end(ap);
 
 	if (len >= 0) {
-		write(fd, buf, len);
+		if (write(fd, buf, len) < len) {
+			client_log(IRC_LOG_ERR, "Failed to write to file: %s\n", strerror(errno));
+		}
 		free(buf);
 	}
 }
@@ -216,7 +218,9 @@ static void *rx_thread(void *varg)
 
 	client_log(IRC_LOG_INFO, "IRC client receive thread has exited\n");
 	assert(!irc_client_connected(client));
-	write(iopipe[1], "", 1);
+	if (write(iopipe[1], "", 1) < 1) {
+		client_log(IRC_LOG_ERR, "Failed to write to file: %s\n", strerror(errno));
+	}
 	return NULL;
 }
 
@@ -283,7 +287,11 @@ static int client_readline(char *buf, size_t len)
 					buf--;
 					len++;
 				} else {
-					write(STDOUT_FILENO, "\a", 1); /* Ring the bell to signal nothing to erase in buffer */
+					/* Ring the bell to signal nothing to erase in buffer */
+					if (write(STDOUT_FILENO, "\a", 1) < 1)
+					{
+						client_log(IRC_LOG_ERR, "Failed to write to file: %s\n", strerror(errno));
+					}
 					/* This will print ^? to the CLI, so write over the whole line as well */
 				}
 				printf(CLEAR_LINE "%s%.*s", client_prompt, num_read, bufstart);
@@ -334,8 +342,10 @@ static int client_readline(char *buf, size_t len)
 
 static void __sigint_handler(int num)
 {
+	int _;
 	(void) num;
-	write(iopipe[1], "", 1); /* This will cause the client_readline loop to wake up and exit after setting shutting_down = 1 */
+	_ = write(iopipe[1], "", 1); /* This will cause the client_readline loop to wake up and exit after setting shutting_down = 1 */
+	(void) _;
 }
 
 /*! \brief Replacement for the obsolete getpass(3) */

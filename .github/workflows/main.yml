@@ -5,8 +5,6 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
@@ -14,137 +12,149 @@ jobs:
     runs-on: ubuntu-24.04
     name: Ubuntu 24.04
     steps:
-     - name: Checkout
-       uses: actions/checkout@v4
-     - name: Start build
-       run: |
-          echo Beginning build
-          make
-          sudo make install
-          make client
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y cmake build-essential libssl-dev
+      - name: Build and Install
+        run: |
+          cmake -B build
+          cmake --build build
+          sudo cmake --install build
   ubuntu-stable:
     runs-on: ubuntu-22.04
     name: Ubuntu 22.04
     steps:
-     - name: Checkout
-       uses: actions/checkout@v4
-     - name: Start build
-       run: |
-          echo Beginning build
-          make
-          sudo make install
-          make client
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y cmake build-essential libssl-dev
+      - name: Build and Install
+        run: |
+          cmake -B build
+          cmake --build build
+          sudo cmake --install build
   debian-12:
     runs-on: ubuntu-24.04
-    name: Debian 12
     container: debian:12
+    name: Debian 12
     steps:
       - uses: actions/checkout@v4
-      - name: Start build
+      - name: Install dependencies
         run: |
-          apt-get -y update
-          apt-get -y install make build-essential libssl-dev
-          make
-          make install
-          make client
+          apt-get update
+          apt-get install -y cmake build-essential libssl-dev
+      - name: Build and Install
+        run: |
+          cmake -B build
+          cmake --build build
+          cmake --install build
   debian-11:
     runs-on: ubuntu-24.04
-    name: Debian 11
     container: debian:11
+    name: Debian 11
     steps:
       - uses: actions/checkout@v4
-      - name: Start build
+      - name: Install dependencies
         run: |
-          apt-get -y update
-          apt-get -y install make build-essential libssl-dev
-          make
-          make install
-          make client
+          apt-get update
+          apt-get install -y cmake build-essential libssl-dev
+      - name: Build and Install
+        run: |
+          cmake -B build
+          cmake --build build
+          cmake --install build
   debian-10:
     runs-on: ubuntu-24.04
-    name: Debian 10
     container: debian:10
+    name: Debian 10
     steps:
       - uses: actions/checkout@v4
-      - name: Start build
+      - name: Install dependencies
         run: |
-          apt-get -y update
-          apt-get -y install make build-essential libssl-dev
-          make
-          make install
-          make client
+          apt-get update
+          apt-get install -y cmake build-essential libssl-dev
+      - name: Build and Install
+        run: |
+          cmake -B build
+          cmake --build build
+          cmake --install build
   fedora-42:
     runs-on: ubuntu-24.04
-    name: Fedora 42
     container: fedora:42
+    name: Fedora 42
     steps:
       - uses: actions/checkout@v4
-      - name: Start build
+      - name: Install dependencies
+        run: dnf install -y cmake make gcc openssl-devel
+      - name: Build and Install
         run: |
-          dnf install -y make gcc openssl-devel
-          make
-          make install
-          make client
+          cmake -B build
+          cmake --build build
+          cmake --install build
   fedora-40:
     runs-on: ubuntu-24.04
-    name: Fedora 40
     container: fedora:40
+    name: Fedora 40
     steps:
       - uses: actions/checkout@v4
-      - name: Start build
+      - name: Install dependencies
+        run: dnf install -y cmake make gcc openssl-devel
+      - name: Build and Install
         run: |
-          dnf install -y make gcc openssl-devel
-          make
-          make install
-          make client
+          cmake -B build
+          cmake --build build
+          cmake --install build
   rocky-9:
     runs-on: ubuntu-24.04
-    name: Rocky Linux 9.3
     container: rockylinux:9.3
+    name: Rocky Linux 9.3
     steps:
       - uses: actions/checkout@v4
-      - name: Start build
+      - name: Install dependencies
+        run: dnf install -y cmake make gcc openssl-devel
+      - name: Build and Install
         run: |
-          dnf install -y make gcc openssl-devel
-          make
-          make install
-          make client
+          cmake -B build
+          cmake --build build
+          cmake --install build
   rocky-8:
     runs-on: ubuntu-24.04
-    name: Rocky Linux 8.9
     container: rockylinux:8.9
+    name: Rocky Linux 8.9
     steps:
       - uses: actions/checkout@v4
-      - name: Start build
+      - name: Install dependencies
+        run: dnf install -y cmake make gcc openssl-devel
+      - name: Build and Install
         run: |
-          dnf install -y make gcc openssl-devel
-          make
-          make install
-          make client
+          cmake -B build
+          cmake --build build
+          cmake --install build
   opensuse:
     runs-on: ubuntu-24.04
-    name: openSUSE Tumbleweed
     container: opensuse/tumbleweed
+    name: openSUSE Tumbleweed
     steps:
       - uses: actions/checkout@v4
-      - name: Start build
+      - name: Install dependencies
+        run: zypper install -y cmake make gcc libopenssl-devel
+      - name: Build and Install
         run: |
-          zypper install -y make gcc libopenssl-devel
-          make
-          make install
-          make client
+          cmake -B build
+          cmake --build build
+          cmake --install build
   archlinux:
     runs-on: ubuntu-24.04
-    name: Arch Linux
     container: archlinux:latest
+    name: Arch Linux
     steps:
       - uses: actions/checkout@v4
-      - name: Start build
+      - name: Install dependencies
+        run: pacman -Sy --noconfirm cmake make gcc openssl
+      - name: Build and Install
         run: |
-          pacman -Sy --noconfirm make gcc
-          make
-          make install
-          make client
+          cmake -B build
+          cmake --build build
+          cmake --install build
   freebsd-14:
     runs-on: ubuntu-24.04
     name: FreeBSD
@@ -155,9 +165,8 @@ jobs:
         with:
           usesh: true
           prepare: |
-            pkg install -y gmake lang/gcc
+            pkg install -y cmake gmake gcc
           run: |
-            which gcc
-            gmake
-            gmake install
-            gmake client
+            cmake -B build
+            cmake --build build -- -j$(sysctl -n hw.ncpu)
+            cmake --install build
